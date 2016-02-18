@@ -1,7 +1,13 @@
 jenkins:
-  image: jenkins
+  image: nimkar/jenkins
+  volumes:
+    - ./sources/:/sources
+    - ./jenkins/:/var/jenkins_home
   ports:
     - "18080:8080"
+  dns:
+    - 10.170.64.156
+    - 10.170.64.158
 
 sonarqube:
   image: sonarqube
