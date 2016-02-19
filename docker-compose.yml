@@ -17,14 +17,30 @@ sonarqube:
   environment:
     - SONARQUBE_JDBC_URL=jdbc:postgresql://localhost:5432/sonar
 
-database:
+sonar_database:
   image: postgres
   net: container:sonarqube
   environment:
     - POSTGRES_USER=sonar
     - POSTGRES_PASSWORD=sonar
 
-gerrit:
-  image: socialwifi/gerrit
+reviewboard:
+  image: ikatson/reviewboard
+  links:
+    - "memcached:memcached"
+    - "rb_database:pg"
+  volumes:
+    - ./sources/:/media
   ports:
-    - "18088:8080"
+    - "18000:8000"
+
+memcached:
+  image: sylvainlasnier/memcached
+  ports:
+    - "11211:11211"
+
+rb_database:
+  image: postgres
+  environment:
+    - POSTGRES_USER=reviewboard
+    - POSTGRES_PASSWORD=reviewboard
